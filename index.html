@@ -1,19 +1,113 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Kelulusan Siswa</title>
-  <link rel="stylesheet" href="style.css">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f0f4f8;
+      margin: 0;
+      padding: 40px;
+      display: flex;
+      justify-content: center;
+    }
+
+    .container {
+      background: white;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      width: 320px;
+      text-align: center;
+    }
+
+    input[type="text"] {
+      width: 100%;
+      padding: 10px;
+      font-size: 1rem;
+      margin-bottom: 15px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      box-sizing: border-box;
+    }
+
+    button {
+      padding: 10px 20px;
+      font-size: 1rem;
+      border: none;
+      background-color: #3498db;
+      color: white;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #2980b9;
+    }
+
+    .result {
+      margin-top: 25px;
+      font-size: 1.1rem;
+    }
+
+    .status {
+      font-weight: bold;
+      padding: 5px 10px;
+      border-radius: 5px;
+      display: inline-block;
+      margin-top: 10px;
+    }
+
+    .lulus {
+      background-color: #2ecc71;
+      color: white;
+    }
+
+    .tidak-lulus {
+      background-color: #e74c3c;
+      color: white;
+    }
+  </style>
 </head>
 <body>
   <div class="container">
-    <h1>Pengumuman Kelulusan</h1>
-    <div class="student-card">
-      <h2>Nama: Budi Santoso</h2>
-      <p>NISN: 1234567890</p>
-      <p>Status: <span class="status lulus">LULUS</span></p>
-    </div>
+    <h1>Check Kelulusan Siswa</h1>
+    <input type="text" id="nisnInput" placeholder="Masukkan NISN" />
+    <button onclick="checkKelulusan()">Cek</button>
+
+    <div class="result" id="result"></div>
   </div>
+
+  <script>
+    const students = {
+      "1234567890": { name: "Budi Santoso", status: "lulus" },
+      "0987654321": { name: "Sari Wijaya", status: "tidak-lulus" },
+      "1112223334": { name: "Andi Pratama", status: "lulus" },
+      "5556667778": { name: "Dewi Lestari", status: "tidak-lulus" },
+      "9998887776": { name: "Rina Kartika", status: "lulus" }
+    };
+
+    function checkKelulusan() {
+      const nisn = document.getElementById("nisnInput").value.trim();
+      const resultDiv = document.getElementById("result");
+
+      if (!nisn) {
+        resultDiv.innerHTML = '<span style="color:#e74c3c;">Tolong masukkan NISN.</span>';
+        return;
+      }
+
+      const student = students[nisn];
+      if (student) {
+        resultDiv.innerHTML = `
+          <p>Nama: <strong>${student.name}</strong></p>
+          <p>Status: <span class="status ${student.status}">${student.status === "lulus" ? "LULUS" : "TIDAK LULUS"}</span></p>
+        `;
+      } else {
+        resultDiv.innerHTML = '<span style="color:#e67e22;">NISN tidak ditemukan.</span>';
+      }
+    }
+  </script>
 </body>
 </html>
