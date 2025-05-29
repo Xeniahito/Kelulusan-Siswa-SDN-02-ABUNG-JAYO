@@ -50,6 +50,15 @@
     .result {
       margin-top: 25px;
       font-size: 1.1rem;
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.5s ease-out, padding 0.5s ease-out;
+      padding: 0 10px;
+    }
+
+    .result.show {
+      max-height: 200px;
+      padding: 15px 10px;
     }
 
     .status {
@@ -73,28 +82,77 @@
 </head>
 <body>
   <div class="container">
-    <h1>Check Kelulusan Siswa</h1>
-    <input type="text" id="nisnInput" placeholder="Masukkan NISN" />
-    <button onclick="checkKelulusan()">Cek</button>
+    <h1>Pengecekan Kelulusan Siswa</h1>
+    <input type="text" id="nisnInput" placeholder="Masukkan NISN Anda" />
+    <button onclick="checkKelulusan()">Periksa</button>
 
     <div class="result" id="result"></div>
   </div>
 
   <script>
     const students = {
-      "1234567890": { name: "Budi Santoso", status: "lulus" },
-      "0987654321": { name: "Sari Wijaya", status: "tidak-lulus" },
-      "1112223334": { name: "Andi Pratama", status: "lulus" },
-      "5556667778": { name: "Dewi Lestari", status: "tidak-lulus" },
-      "9998887776": { name: "Rina Kartika", status: "lulus" }
+      "3138234578": { name: "Ahmad Sandy Saputra", status: "tidak-lulus" },
+      "3133395774": { name: "Anisyafani", status: "lulus" },
+      "136121795":  { name: "Arjun Susilo", status: "lulus" },
+      "3125117218": { name: "Asiilah Nur Fadilah", status: "lulus" },
+      "3134024358": { name: "Atika Khoiriah", status: "lulus" },
+      "3132792791": { name: "Bunga Lestari", status: "lulus" },
+      "3134459939": { name: "Caysha Callen Aurelya", status: "lulus" },
+      "138653011":  { name: "Fajar Arrifky", status: "lulus" },
+      "125336859":  { name: "Fajar Dirgantara", status: "lulus" },
+      "3133411519": { name: "Fatan Ramadhan", status: "lulus" },
+      "3124287613": { name: "Muhamad Zidan Maulana", status: "lulus" },
+      "0129264254": { name: "Muhammad Dani Prasetyo", status: "lulus" },
+      "3136934517": { name: "Muhammad Habib Prasetya", status: "lulus" },
+      "0134926274": { name: "Naisila Evrilia Janesa", status: "lulus" },
+      "3124892105": { name: "Putri Oktaviani", status: "lulus" },
+      "3126573226": { name: "Qyqy Nazriel Syahputra", status: "lulus" },
+      "3133341089": { name: "Raihan Nararya", status: "lulus" },
+      "3137430121": { name: "Revan Dwi Anafi", status: "lulus" },
+      "0138719127": { name: "Salsabila Adila Syahputra", status: "lulus" },
+      "3127782115": { name: "Shafira Annastasya", status: "lulus" },
+      "0126164676": { name: "Silvi Auliya", status: "lulus" },
+      "3139780989": { name: "Silvira Nakayanda", status: "lulus" },
+      "3138946079": { name: "Sri Wahyuni", status: "lulus" },
+      "0132591040": { name: "Willy Rosadi", status: "lulus" },
+      "3124933087": { name: "Zaskia Ramadhani", status: "lulus" },
+      "3122202645": { name: "Arjun Hadi", status: "lulus" },
+      "3123823348": { name: "Asyraful Anam", status: "tidak-lulus" },
+      "3133712909": { name: "Briyan Dino", status: "lulus" },
+      "3135734180": { name: "Cahya Adinda", status: "lulus" },
+      "3123974769": { name: "Dia Azila", status: "lulus" },
+      "3122408170": { name: "Fadil Izal Batara", status: "lulus" },
+      "3134962640": { name: "Henisa Hasyana", status: "lulus" },
+      "0127244314": { name: "Khofifah Khoirunisa", status: "tidak-lulus" },
+      "3135996532": { name: "Liza Aprilia", status: "lulus" },
+      "3131155793": { name: "Maulana Al Hasyim", status: "lulus" },
+      "3129812734": { name: "Muhamad Afiful Iman", status: "lulus" },
+      "3123248736": { name: "Naufal Isnan Zuniaditiya", status: "lulus" },
+      "3131628733": { name: "Nur Suci", status: "lulus" },
+      "0122267851": { name: "Rizky Nur Hidayat", status: "lulus" },
+      "3131393599": { name: "Satria Alif", status: "lulus" },
+      "3122997698": { name: "Silvi Yulianti", status: "lulus" },
+      "3123910998": { name: "Siti Aulia Herawati", status: "lulus" },
+      "3125992114": { name: "Syakela Naila Sahira", status: "lulus" },
+      "3135558508": { name: "Syifa Nursafana", status: "lulus" },
+      "0137443933": { name: "Vanezza Hayu Septian", status: "lulus" },
+      "3131638248": { name: "Wildan Alyanza", status: "lulus" },
+      "3131916848": { name: "Yoga Pratama", status: "lulus" },
+      "3134472030": { name: "Yogi Ade Saputra", status: "tidak-lulus" },
+      "3127093362": { name: "Zahira Addawiyyatu Riffa", status: "lulus" }
     };
+
 
     function checkKelulusan() {
       const nisn = document.getElementById("nisnInput").value.trim();
       const resultDiv = document.getElementById("result");
 
+      resultDiv.classList.remove("show");
+      resultDiv.innerHTML = "";
+
       if (!nisn) {
-        resultDiv.innerHTML = '<span style="color:#e74c3c;">Tolong masukkan NISN.</span>';
+        resultDiv.innerHTML = '<span style="color:#e74c3c;">Mohon masukkan NISN terlebih dahulu.</span>';
+        resultDiv.classList.add("show");
         return;
       }
 
@@ -102,10 +160,12 @@
       if (student) {
         resultDiv.innerHTML = `
           <p>Nama: <strong>${student.name}</strong></p>
-          <p>Status: <span class="status ${student.status}">${student.status === "lulus" ? "LULUS" : "TIDAK LULUS"}</span></p>
+          <p>Status Kelulusan: <span class="status ${student.status}">${student.status === "lulus" ? "LULUS" : "TIDAK LULUS"}</span></p>
         `;
+        resultDiv.classList.add("show");
       } else {
-        resultDiv.innerHTML = '<span style="color:#e67e22;">NISN tidak ditemukan.</span>';
+        resultDiv.innerHTML = '<span style="color:#e67e22;">NISN tidak ditemukan dalam data.</span>';
+        resultDiv.classList.add("show");
       }
     }
   </script>
